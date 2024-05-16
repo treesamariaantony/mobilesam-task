@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: segmented-image
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: segmented-image
+  template:
+    metadata:
+      labels:
+        app: segmented-image
+    spec:
+      containers:
+        - name: segmented-image
+          image: gcr.io/tasks-423420/segmented_image:latest
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: segmented-image-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: segmented-image
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
